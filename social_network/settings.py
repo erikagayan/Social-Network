@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
 
-    "social_app",
+    # "social_app",
 ]
 
 MIDDLEWARE = [
