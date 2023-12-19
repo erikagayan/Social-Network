@@ -1,16 +1,7 @@
 from rest_framework import generics
-from social_app.models import User, Post, Like
-from social_app.serializers import UserSerializer, PostSerializer, LikeSerializer
-
-
-class UserListCreateView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from social_app.models import Post, Like
+from social_app.serializers import PostSerializer, LikeSerializer
+from users.models import User
 
 
 class PostListCreateView(generics.ListCreateAPIView):
