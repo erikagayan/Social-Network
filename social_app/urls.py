@@ -2,12 +2,6 @@ from django.urls import path
 from social_app import views
 
 urlpatterns = [
-    path("users/", views.UserListCreateView.as_view(), name="user-list"),
-    path(
-        "users/<int:pk>/",
-        views.UserRetrieveUpdateDestroyView.as_view(),
-        name="user-detail",
-    ),
     path("posts/", views.PostListCreateView.as_view(), name="post-list"),
     path(
         "posts/<int:pk>/",
