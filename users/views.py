@@ -1,8 +1,7 @@
 from rest_framework import generics
 from users.serializers import UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from social_app.permissions import IsAdminOrIfAuthenticatedReadOnly
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -15,8 +14,7 @@ class CreateTokenView(TokenObtainPairView):
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_object(self):
         return self.request.user
