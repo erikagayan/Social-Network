@@ -10,6 +10,14 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ["id", "author", "title", "content", "created_at", "updated_at"]
 
 
+class PostListSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source="author.username")
+
+    class Meta:
+        model = Post
+        fields = ["id", "author", "title"]
+
+
 class LikeSerializer(serializers.ModelSerializer):
     post = PostSerializer(read_only=True)
 
