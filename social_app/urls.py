@@ -1,19 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 from social_app import views
+from rest_framework import routers
+
+from social_app.views import PostViewSet
+
+
+router = routers.DefaultRouter()
+router.register("posts", PostViewSet)
 
 urlpatterns = [
-    path("posts/", views.PostListCreateView.as_view(), name="post-list"),
-    path(
-        "posts/<int:pk>/",
-        views.PostRetrieveUpdateDestroyView.as_view(),
-        name="post-detail",
-    ),
-    path("likes/", views.LikeListCreateView.as_view(), name="like-list"),
-    path(
-        "likes/<int:pk>/",
-        views.LikeRetrieveUpdateDestroyView.as_view(),
-        name="like-detail",
-    ),
+    path("", include(router.urls)),
 ]
 
 app_name = "social_app"

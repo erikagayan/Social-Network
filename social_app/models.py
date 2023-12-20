@@ -16,6 +16,9 @@ class Post(models.Model):
     def __str__(self):
         return str(self.title)
 
+    def has_object_permission(self, request):
+        return request.user == self.author
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
