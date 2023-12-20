@@ -1,22 +1,19 @@
 from rest_framework import generics
 from social_app.models import Post, Like
 from social_app.serializers import PostSerializer, LikeSerializer
-from social_app.permissions import IsAdminOrIfAuthenticatedReadOnly
+from social_app.permissions import IsAdminOrIfAuthenticatedReadOnly, IsAuthenticatedAndHasPermission
+from rest_framework import viewsets, mixins
 
 
-class PostListCreateView(generics.ListCreateAPIView):
+class PostViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    permission_classes = (IsAuthenticatedAndHasPermission,)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-
-class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class LikeListCreateView(generics.ListCreateAPIView):
