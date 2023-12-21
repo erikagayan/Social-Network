@@ -18,7 +18,7 @@ class Post(models.Model):
         return str(self.title)
 
     def has_object_permission(self, request):
-        return request.user == self.author
+        return request.user.is_authenticated and (request.user == self.author or request.user.is_staff)
 
 
 class Like(models.Model):
