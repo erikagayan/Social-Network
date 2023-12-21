@@ -4,10 +4,11 @@ from social_app.models import Post, Like
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source="author.username")
+    likes_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Post
-        fields = ["id", "author", "title", "content", "created_at", "updated_at"]
+        fields = ["id", "author", "title", "content", "created_at", "updated_at", "likes_count"]
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -19,7 +20,8 @@ class PostListSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
-    post = PostSerializer(read_only=True)
+    user = serializers.ReadOnlyField(source="user.username")
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
 
     class Meta:
         model = Like
