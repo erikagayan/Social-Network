@@ -9,6 +9,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes_count = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["title"]
@@ -22,5 +23,12 @@ class Post(models.Model):
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def has_object_permission(self, request):
+        return request.user == self.user
+
+    class Meta:
+        ordering = ["-created_at"]
+        unique_together = [("user", "post")]

@@ -1,5 +1,3 @@
-from rest_framework import generics
-from social_app.models import Post, Like
 from rest_framework import viewsets, mixins
 from rest_framework.generics import RetrieveAPIView
 
@@ -14,12 +12,13 @@ from social_app.serializers import (
     PostListSerializer,
 )
 
+from social_app.models import Post, Like
+
 
 class PostViewSet(
     mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet
 ):
     queryset = Post.objects.all()
-    # serializer_class = PostSerializer
     permission_classes = (IsAuthenticatedAndHasPermission,)
 
     def get_serializer_class(self):
@@ -36,16 +35,26 @@ class PostDetailView(RetrieveAPIView):
     serializer_class = PostSerializer
 
 
-class LikeListCreateView(generics.ListCreateAPIView):
+class LikeViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  viewsets.GenericViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    permission_classes = (IsAuthenticatedAndHasPermission,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+        # Increment the likes_count field of the associated post
+        like = serializer.save()
+        post = like.post
+        post.likes_count += 1
+        post.save()
 
-class LikeRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+        return like
+
+    def perform_destroy(self, instance):
+        instance.post.likes_count -= 1
+        instance.post.save()
+
+        instance.delete()

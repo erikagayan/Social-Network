@@ -1,11 +1,14 @@
 from django.urls import path, include
-from social_app import views
 from rest_framework import routers
-
-from social_app.views import PostViewSet, PostDetailView
+from social_app.views import (
+    PostViewSet,
+    PostDetailView,
+    LikeViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register("posts", PostViewSet)
+router.register("likes", LikeViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
