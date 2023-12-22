@@ -10,9 +10,10 @@ from social_app.serializers import (
     PostSerializer,
     LikeSerializer,
     PostListSerializer,
+    AnalyticsSerializer,
 )
 
-from social_app.models import Post, Like
+from social_app.models import Post, Like, Analytics
 
 
 class PostViewSet(
@@ -57,3 +58,22 @@ class LikeViewSet(mixins.ListModelMixin,
         instance.post.save()
 
         instance.delete()
+
+
+class AnalyticsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Analytics.objects.all()
+    serializer_class = AnalyticsSerializer
+    permission_classes = (IsAuthenticatedAndHasPermission,)
+
+    def get_queryset(self):
+        date_from = self.request.query_params.get("date_from")
+        date_to = self.request.query_params.get("date_to")
+
+        if date_from and date_to:
+            return Analytics.objects.filter(date__range=[date_from, date_to])
+        elif date_from:
+            return Analytics.objects.filter(date__gte=date_from)
+        elif date_to:
+            return Analytics.objects.filter(date__lte=date_to)
+        else:
+            return Analytics.objects.all()

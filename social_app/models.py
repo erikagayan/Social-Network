@@ -32,3 +32,12 @@ class Like(models.Model):
     class Meta:
         ordering = ["-created_at"]
         unique_together = [("user", "post")]
+
+
+class Analytics(models.Model):
+    date = models.DateField()
+    likes_count = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ["date"]
+        unique_together = [("date",)]
