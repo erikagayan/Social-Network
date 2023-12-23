@@ -8,7 +8,15 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "author", "title", "content", "created_at", "updated_at", "likes_count"]
+        fields = [
+            "id",
+            "author",
+            "title",
+            "content",
+            "created_at",
+            "updated_at",
+            "likes_count",
+        ]
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -31,7 +39,6 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class AnalyticsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Analytics
         fields = ["date", "likes_count"]

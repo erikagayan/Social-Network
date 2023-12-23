@@ -14,7 +14,7 @@ class CreateUserView(generics.CreateAPIView):
 class CreateTokenView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        user = User.objects.get(username=request.data['username'])
+        user = User.objects.get(username=request.data["username"])
         user.last_login = timezone.now()
         user.save()
         return response
