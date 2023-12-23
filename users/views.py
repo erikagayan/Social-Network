@@ -1,4 +1,7 @@
+from django.utils import timezone
 from rest_framework import generics
+
+from users.models import User
 from users.serializers import UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from social_app.permissions import IsAdminOrIfAuthenticatedReadOnly
@@ -9,7 +12,12 @@ class CreateUserView(generics.CreateAPIView):
 
 
 class CreateTokenView(TokenObtainPairView):
-    pass
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        user = User.objects.get(username=request.data['username'])
+        user.last_login = timezone.now()
+        user.save()
+        return response
 
 
 class ManageUserView(generics.RetrieveUpdateAPIView):

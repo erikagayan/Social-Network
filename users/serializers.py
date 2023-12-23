@@ -3,10 +3,12 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
+    last_login = serializers.DateTimeField(read_only=True)
+
     class Meta:
         model = get_user_model()
-        fields = ("id", "username", "email", "password", "is_staff")
-        read_only_fields = ("id", "is_staff")
+        fields = ("id", "username", "email", "password", "is_staff", "last_login")
+        read_only_fields = ("id", "is_staff", "last_login")
         extra_kwargs = {"password": {"write_only": True, "min_length": 5}}
 
     def create(self, validated_data):

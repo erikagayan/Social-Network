@@ -4,3 +4,4 @@ from django.db import models
 
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True, default="username")
+    last_login = models.DateTimeField(null=True, blank=True)
