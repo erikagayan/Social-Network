@@ -22,13 +22,13 @@ class PostViewSet(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
-    viewsets.GenericViewSet
+    viewsets.GenericViewSet,
 ):
     queryset = Post.objects.all()
     permission_classes = (IsAuthenticatedAndHasPermission,)
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return PostListSerializer
         return PostSerializer
 
@@ -36,9 +36,9 @@ class PostViewSet(
         serializer.save(author=self.request.user)
 
 
-class LikeViewSet(mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  viewsets.GenericViewSet):
+class LikeViewSet(
+    mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet
+):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = (IsAuthenticatedAndHasPermission,)
